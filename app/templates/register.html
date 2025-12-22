@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrasi - Miya Laundry{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h3 class="fw-bold">Daftar Akun Baru</h3>
+                            <p class="text-muted">Bergabunglah dengan kami untuk layanan terbaik</p>
+                        </div>
+                        
+                        <form method="POST" action="{{ url_for('auth.register') }}">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="username" class="form-label fw-semibold">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label fw-semibold">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="full_name" class="form-label fw-semibold">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="full_name" name="full_name" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phone" class="form-label fw-semibold">Nomor Telepon</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="+62">
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label fw-semibold">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                            <i class="bi bi-eye" id="passwordIcon"></i>
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">Minimal 6 karakter</small>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirm_password" class="form-label fw-semibold">Konfirmasi Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required minlength="6">
+                                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                            <i class="bi bi-eye" id="confirmPasswordIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold mt-3">
+                                <i class="bi bi-person-plus me-2"></i>Daftar Sekarang
+                            </button>
+                        </form>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="text-center">
+                            <p class="mb-0">Sudah punya akun? <a href="{{ url_for('auth.login') }}" class="text-decoration-none fw-semibold">Login di sini</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Toggle password visibility for password field
+document.getElementById('togglePassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    const passwordIcon = document.getElementById('passwordIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('bi-eye');
+        passwordIcon.classList.add('bi-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('bi-eye-slash');
+        passwordIcon.classList.add('bi-eye');
+    }
+});
+
+// Toggle password visibility for confirm password field
+document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const confirmPasswordIcon = document.getElementById('confirmPasswordIcon');
+    
+    if (confirmPasswordInput.type === 'password') {
+        confirmPasswordInput.type = 'text';
+        confirmPasswordIcon.classList.remove('bi-eye');
+        confirmPasswordIcon.classList.add('bi-eye-slash');
+    } else {
+        confirmPasswordInput.type = 'password';
+        confirmPasswordIcon.classList.remove('bi-eye-slash');
+        confirmPasswordIcon.classList.add('bi-eye');
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Admin - Miya Laundry{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background: #f8fafc; min-height: 100vh;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold">Dashboard Administrator</h2>
+                <p class="text-muted mb-0">Selamat datang, {{ current_user.full_name }}</p>
+            </div>
+            <span class="badge bg-primary fs-6">{{ current_user.role.name }}</span>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Total Layanan</p>
+                                <h3 class="fw-bold mb-0">{{ stats.total_services }}</h3>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 p-3 rounded">
+                                <i class="bi bi-grid-3x3-gap text-primary fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Layanan Aktif</p>
+                                <h3 class="fw-bold mb-0">{{ stats.active_services }}</h3>
+                            </div>
+                            <div class="bg-success bg-opacity-10 p-3 rounded">
+                                <i class="bi bi-check-circle text-success fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Total Pengguna</p>
+                                <h3 class="fw-bold mb-0">{{ stats.total_users }}</h3>
+                            </div>
+                            <div class="bg-warning bg-opacity-10 p-3 rounded">
+                                <i class="bi bi-people text-warning fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Total Pesanan</p>
+                                <h3 class="fw-bold mb-0">{{ stats.total_orders }}</h3>
+                            </div>
+                            <div class="bg-info bg-opacity-10 p-3 rounded">
+                                <i class="bi bi-cart text-info fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Total Pendapatan</p>
+                                <h4 class="fw-bold mb-0 text-success">Rp {{ stats.total_revenue|number_format }}</h4>
+                            </div>
+                            <div class="bg-success bg-opacity-10 p-3 rounded">
+                                <i class="bi bi-cash text-success fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted mb-1">Pesanan Selesai</p>
+                                <h3 class="fw-bold mb-0">{{ stats.completed_orders }}</h3>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 p-3 rounded">
+                                <i class="bi bi-check-circle-fill text-primary fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-4">Aksi Cepat</h5>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a href="{{ url_for('admin.manage_services') }}" class="btn btn-primary">
+                                <i class="bi bi-grid-3x3-gap me-2"></i>Kelola Layanan
+                            </a>
+                            <a href="{{ url_for('admin.create_service') }}" class="btn btn-success">
+                                <i class="bi bi-plus-circle me-2"></i>Tambah Layanan Baru
+                            </a>
+                            <a href="{{ url_for('main.services') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-eye me-2"></i>Lihat Halaman Layanan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Revenue Breakdown -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-4">Ringkasan Pendapatan</h5>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="card bg-warning bg-opacity-10 border-warning">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-clock text-warning fs-1 mb-3"></i>
+                                        <h5 class="fw-bold">Menunggu Pembayaran</h5>
+                                        <h4 class="text-warning mb-2">Rp {{ stats.pending_revenue|number_format }}</h4>
+                                        <small class="text-muted">{{ stats.pending_orders }} pesanan</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-info bg-opacity-10 border-info">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-gear text-info fs-1 mb-3"></i>
+                                        <h5 class="fw-bold">Sedang Diproses</h5>
+                                        <h4 class="text-info mb-2">Rp {{ stats.processing_revenue|number_format }}</h4>
+                                        <small class="text-muted">{{ stats.processing_orders }} pesanan</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-success bg-opacity-10 border-success">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
+                                        <h5 class="fw-bold">Sudah Diterima</h5>
+                                        <h4 class="text-success mb-2">Rp {{ stats.completed_revenue|number_format }}</h4>
+                                        <small class="text-muted">{{ stats.completed_orders }} pesanan</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Services Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="fw-bold mb-4">Layanan Terbaru</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Layanan</th>
+                                <th>Harga</th>
+                                <th>Satuan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for service in recent_services %}
+                            <tr>
+                                <td>{{ service.id }}</td>
+                                <td class="fw-semibold">{{ service.name }}</td>
+                                <td>{{ service.get_formatted_price() }}</td>
+                                <td>{{ service.unit }}</td>
+                                <td>
+                                    <span class="badge {% if service.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {% if service.is_active %}Aktif{% else %}Nonaktif{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.edit_service', service_id=service.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

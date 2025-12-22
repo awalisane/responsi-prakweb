@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Kelola Pelanggan - Admin{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background: #f8fafc; min-height: 100vh;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold">Kelola Pelanggan</h2>
+                <p class="text-muted mb-0">Manajemen data pelanggan Miya Laundry</p>
+            </div>
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left me-2"></i>Kembali ke Dashboard
+            </a>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 15%;">Username</th>
+                                <th style="width: 20%;">Nama Lengkap</th>
+                                <th style="width: 25%;">Email</th>
+                                <th style="width: 15%;">Telepon</th>
+                                <th style="width: 10%;">Total Pesanan</th>
+                                <th style="width: 10%;">Bergabung</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td class="fw-semibold">{{ customer.id }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle bg-primary text-white me-2" style="width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                            {{ customer.username[0].upper() }}
+                                        </div>
+                                        <span class="fw-semibold">{{ customer.username }}</span>
+                                    </div>
+                                </td>
+                                <td class="fw-semibold">{{ customer.full_name }}</td>
+                                <td>
+                                    <a href="mailto:{{ customer.email }}" class="text-decoration-none">
+                                        {{ customer.email }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {% if customer.phone %}
+                                    <a href="tel:{{ customer.phone }}" class="text-decoration-none">
+                                        {{ customer.phone }}
+                                    </a>
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ customer.orders.count() }}</span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ customer.created_at.strftime('%d/%m/%Y') }}
+                                    </small>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if customers|length == 0 %}
+                <div class="text-center py-5">
+                    <i class="bi bi-people text-muted" style="font-size: 5rem;"></i>
+                    <h4 class="text-muted mt-3">Belum ada pelanggan</h4>
+                    <p class="text-muted">Belum ada pelanggan yang terdaftar di sistem</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

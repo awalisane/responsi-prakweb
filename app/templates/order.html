@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Pesan Layanan - {{ service.name }} - Miya Laundry{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold mb-3">Pesan Layanan</h1>
+                <p class="lead">{{ service.name }}</p>
+            </div>
+            <div class="col-md-6">
+                <img src="{{ service.image_url }}" alt="{{ service.name }}" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Order Form -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="bi bi-cart-plus me-2"></i>Detail Pesanan</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Service Info -->
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <h5>{{ service.name }}</h5>
+                                <p class="text-muted">{{ service.description }}</p>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-success me-2">Tersedia</span>
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>{{ service.duration }}
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="h4 text-primary mb-0">{{ service.get_formatted_price() }}</div>
+                                <small class="text-muted">per {{ service.unit }}</small>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <form method="POST">
+                            {{ form.hidden_tag() if form else '' }}
+                            
+                            <!-- Quantity -->
+                            <div class="mb-3">
+                                <label for="quantity" class="form-label fw-bold">Jumlah <span class="text-danger"></span></label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" 
+                                       min="1" value="1" required onchange="calculateTotal()">
+                                <div class="form-text">Masukkan jumlah dalam {{ service.unit }}</div>
+                            </div>
+
+                            <!-- Addresses -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="pickup_address" class="form-label fw-bold">Alamat Penjemputan</label>
+                                    <textarea class="form-control" id="pickup_address" name="pickup_address" 
+                                              rows="3" placeholder="Masukkan alamat lengkap untuk penjemputan"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="delivery_address" class="form-label fw-bold">Alamat Pengiriman</label>
+                                    <textarea class="form-control" id="delivery_address" name="delivery_address" 
+                                              rows="3" placeholder="Masukkan alamat lengkap untuk pengiriman"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="mb-3">
+                                <label for="notes" class="form-label fw-bold">Catatan Tambahan</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="3" 
+                                          placeholder="Instruksi khusus atau catatan untuk laundry"></textarea>
+                            </div>
+
+                            <hr>
+
+                            <!-- Total Calculation -->
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h5 class="mb-0">Total Pembayaran</h5>
+                                    <small class="text-muted">Harga dapat berubah berdasarkan kondisi pakaian</small>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="h3 text-primary mb-0" id="total-price">{{ service.get_formatted_price() }}</div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- Submit -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-check-circle me-2"></i>Buat Pesanan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="alert alert-info mt-4">
+                    <h6><i class="bi bi-info-circle me-2"></i>Informasi Penting</h6>
+                    <ul class="mb-0">
+                        <li>Pembayaran dilakukan setelah layanan selesai</li>
+                        <li>Layanan antar jemput tersedia untuk area Jogjakarta</li>
+                        <li>Estimasi waktu sesuai dengan jenis layanan</li>
+                        <li>Dapat menghubungi customer service untuk informasi lebih lanjut</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function calculateTotal() {
+    const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+    const unitPrice = { service,price };
+    const total = quantity * unitPrice;
+    document.getElementById('total-price').innerHTML = 'Rp ' + total.toLocaleString('id-ID');
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    calculateTotal();
+});
+</script>
+
+{% endblock %}

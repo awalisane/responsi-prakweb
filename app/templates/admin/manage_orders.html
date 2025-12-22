@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Manajemen Pesanan - Admin{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background: #f8fafc; min-height: 100vh;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold">Manajemen Pesanan</h2>
+                <p class="text-muted mb-0">Kelola semua pesanan pelanggan</p>
+            </div>
+            <div>
+                <a href="{{ url_for('admin.manage_customers') }}" class="btn btn-outline-primary me-2">
+                    <i class="bi bi-people me-2"></i>Lihat Pelanggan
+                </a>
+                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-2"></i>Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-clock text-warning" style="font-size: 2rem;"></i>
+                        <h4 class="mt-2">{{ orders|selectattr('status', 'equalto', 'pending')|list|length }}</h4>
+                        <small class="text-muted">Menunggu</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-gear text-info" style="font-size: 2rem;"></i>
+                        <h4 class="mt-2">{{ orders|selectattr('status', 'equalto', 'processing')|list|length }}</h4>
+                        <small class="text-muted">Diproses</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+                        <h4 class="mt-2">{{ orders|selectattr('status', 'equalto', 'ready')|list|length }}</h4>
+                        <small class="text-muted">Siap Ambil</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="bi bi-truck text-primary" style="font-size: 2rem;"></i>
+                        <h4 class="mt-2">{{ orders|selectattr('status', 'equalto', 'delivered')|list|length }}</h4>
+                        <small class="text-muted">Dikirim</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 15%;">Pelanggan</th>
+                                <th style="width: 20%;">Layanan</th>
+                                <th style="width: 8%;">Jumlah</th>
+                                <th style="width: 10%;">Total</th>
+                                <th style="width: 10%;">Status</th>
+                                <th style="width: 12%;">Tanggal</th>
+                                <th style="width: 20%;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td class="fw-semibold">#{{ order.id }}</td>
+                                <td>
+                                    <div>
+                                        <div class="fw-semibold">{{ order.customer.full_name }}</div>
+                                        <small class="text-muted">{{ order.customer.username }}</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">{{ order.service.name }}</div>
+                                    <small class="text-muted">{{ order.quantity }} {{ order.service.unit }}</small>
+                                </td>
+                                <td>{{ order.quantity }}</td>
+                                <td class="fw-bold text-primary">Rp {{ order.total_price|number_format }}</td>
+                                <td>
+                                    <span class="badge
+                                        {% if order.status == 'pending' %} bg-warning
+                                        {% elif order.status == 'processing' %} bg-info
+                                        {% elif order.status == 'ready' %} bg-success
+                                        {% elif order.status == 'delivered' %} bg-primary
+                                        {% elif order.status == 'cancelled' %} bg-danger
+                                        {% else %} bg-secondary{% endif %}">
+                                        {% if order.status == 'pending' %}Menunggu
+                                        {% elif order.status == 'processing' %}Diproses
+                                        {% elif order.status == 'ready' %}Siap Ambil
+                                        {% elif order.status == 'delivered' %}Dikirim
+                                        {% elif order.status == 'cancelled' %}Dibatalkan
+                                        {% else %}{{ order.status }}{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ order.order_date.strftime('%d/%m/%Y') }}<br>
+                                        {{ order.order_date.strftime('%H:%M') }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('admin.update_order_status', order_id=order.id) }}" class="d-inline">
+                                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Menunggu</option>
+                                            <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Diproses</option>
+                                            <option value="ready" {% if order.status == 'ready' %}selected{% endif %}>Siap Ambil</option>
+                                            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Dikirim</option>
+                                            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Batal</option>
+                                        </select>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if orders|length == 0 %}
+                <div class="text-center py-5">
+                    <i class="bi bi-receipt text-muted" style="font-size: 5rem;"></i>
+                    <h4 class="text-muted mt-3">Belum ada pesanan</h4>
+                    <p class="text-muted">Belum ada pesanan dari pelanggan</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
