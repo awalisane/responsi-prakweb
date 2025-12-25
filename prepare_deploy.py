@@ -1,7 +1,4 @@
-
-#Script deployment untuk Railway
-#Gunakan script ini untuk mempersiapkan aplikasi sebelum deploy ke Railway#
-
+#script yang digunakan ntuk mempersiapkan aplikasi sebelum deploy ke Railway#
 
 import os
 import subprocess

@@ -8,7 +8,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///miya_laundry_database.db'
 
-    # Untuk deployment dengan PostgreSQL (recommended):
+    # Untuk deployment dengan PostgreSQL:
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
     #     'postgresql://username:password@host:port/database_name'
 

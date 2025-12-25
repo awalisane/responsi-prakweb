@@ -1,6 +1,6 @@
 
 """
-Script untuk testing koneksi database
+testing koneksi database
 Gunakan script ini untuk memverifikasi koneksi database sebelum deployment
 """
 
