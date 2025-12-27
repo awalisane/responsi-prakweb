@@ -55,21 +55,25 @@
                             <div class="mb-3">
                                 <label for="quantity" class="form-label fw-bold">Jumlah <span class="text-danger"></span></label>
                                 <input type="number" class="form-control" id="quantity" name="quantity" 
-                                       min="1" value="1" required onchange="calculateTotal()">
+                                       min="1" value="1" required oninput="calculateTotal()">
                                 <div class="form-text">Masukkan jumlah dalam {{ service.unit }}</div>
                             </div>
 
                             <!-- Addresses -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="pickup_address" class="form-label fw-bold">Alamat Penjemputan</label>
+                                    <label for="pickup_address" class="form-label fw-bold">Alamat Penjemputan <span class="text-danger">*</span></label>
                                     <textarea class="form-control" id="pickup_address" name="pickup_address" 
-                                              rows="3" placeholder="Masukkan alamat lengkap untuk penjemputan"></textarea>
+                                              rows="3" placeholder="Masukkan alamat lengkap untuk penjemputan" required
+                                              oninvalid="this.setCustomValidity('Alamat penjemputan wajib diisi')"
+                                              oninput="this.setCustomValidity('')"></textarea>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="delivery_address" class="form-label fw-bold">Alamat Pengiriman</label>
+                                    <label for="delivery_address" class="form-label fw-bold">Alamat Pengiriman <span class="text-danger">*</span></label>
                                     <textarea class="form-control" id="delivery_address" name="delivery_address" 
-                                              rows="3" placeholder="Masukkan alamat lengkap untuk pengiriman"></textarea>
+                                              rows="3" placeholder="Masukkan alamat lengkap untuk pengiriman" required
+                                              oninvalid="this.setCustomValidity('Alamat pengiriman wajib diisi')"
+                                              oninput="this.setCustomValidity('')"></textarea>
                                 </div>
                             </div>
 
@@ -123,7 +127,7 @@
 <script>
 function calculateTotal() {
     const quantity = parseFloat(document.getElementById('quantity').value) || 0;
-    const unitPrice = { service,price };
+    const unitPrice = parseFloat('{{ service.price }}');
     const total = quantity * unitPrice;
     document.getElementById('total-price').innerHTML = 'Rp ' + total.toLocaleString('id-ID');
 }

@@ -37,7 +37,16 @@ def order(service_id):
         if not quantity or quantity <= 0:
             flash('Jumlah harus lebih dari 0.', 'danger')
             return render_template('order.html', service=service)
+        if not quantity or quantity <= 0:
+            flash('Jumlah harus lebih dari 0.', 'danger')
+            return render_template('order.html', service=service)
 
+        if not pickup_address:
+            flash('Alamat penjemputan wajib diisi.', 'danger')
+            return render_template('order.html', service=service)
+        if not delivery_address:
+            flash('Alamat pengiriman wajib diisi.', 'danger')
+            return render_template('order.html', service=service)
         total_price = service.price * quantity
 
         order_number = f"ORD-{datetime.now().strftime('%Y%m%d')}-{''.join(random.choices(string.ascii_uppercase + string.digits, k=6))}"
